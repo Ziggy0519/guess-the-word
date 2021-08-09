@@ -9,6 +9,7 @@ const playAgain = document.querySelector(".play-again");
 
 const word = "magnolia";
 const guessedLetters = [];
+let remainingGuessesLeft = 8;
 
 const placeholder = function (word) {
     const placeholderLetters = [];
@@ -53,6 +54,7 @@ const makeGuess = function (guess) {
     } else {
         guessedLetters.push(guess);
         console.log(guessedLetters);
+        acceptedGuesses(guess);
         guessedLettersDisplay();
         updateWordInProgress(guessedLetters);
     }
@@ -84,9 +86,29 @@ const updateWordInProgress = function (guessedLetters) {
     successfulWordGuess();
 };
 
-const successfulWordGuess = function () {
-    if (word.toUpperCase === wordInProgress.innerText) {
-        message.classList.add("win");
-        message.innerHTML = `<p class="hightlight">You guessed correctly the word! Congratulations! </p>`;
+const acceptedGuesses = function (guess) {
+    const upperWord = word.toUpperCase();
+    if (!upperWord.includes(guess)) {
+      message.innerText = `Sorry, the word doesn't contain a ${guess}`;
+      remainingGuesses -= 1;
+    } else {
+      message.innerText = `Excellent! The word has the letter ${guess}`;
     }
-};
+  
+    if (remainingGuesses === 0) {
+      message.innerHTML = `Game over!  The guessed word is <span class="highlight">${word}</span>`;
+    } else if (remainingGuesses === 1) {
+      remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
+    } else {
+      remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+    }
+  };
+
+  const successfulWordGuess= function () {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+      message.classList.add("win");
+      message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+    }
+  };
+
+
